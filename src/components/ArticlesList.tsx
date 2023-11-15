@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Spinner from "./Spinner";
+import TagList from "./TagList";
+import { Link } from "react-router-dom";
 
 interface Article {
   description: string;
@@ -7,10 +9,11 @@ interface Article {
   cover_image: string;
   url: string;
   id: number;
+  tag_list: string[];
   user: {
     name: string;
     profile_image: string;
-  }
+  };
 }
 
 const ArticlesList: React.FC = () => {
@@ -48,14 +51,14 @@ const ArticlesList: React.FC = () => {
                 <div className="m-2">
                   <div className="flex items-center">
                     <div className="mr-2">
-                      <a href={article.url}>
+                      <Link to={`/article/${article.id}`}>
                         <img
                           className="rounded-full w-8"
                           src={article.user.profile_image}
                           alt={article.title}
                           loading="lazy"
                         />
-                      </a>
+                      </Link>
                     </div>
                     <div>
                       <p>
@@ -79,33 +82,11 @@ const ArticlesList: React.FC = () => {
                 </div>
                 <div className="pl-12 md:pl-10 xs:pl-10">
                   <h2 className="text-2xl font-bold mb-2 hover:text-blue-600 leading-7">
-                    <a href={article.url} id="article-link-151230">
+                    <Link to={`/article/${article.id}`}>
                       {article.title}
-                    </a>
+                    </Link>
                   </h2>
-                  <div className="mb-2">
-                    <a
-                      href="/"
-                      className="text-sm text-gray-600 p-1 hover:text-black"
-                    >
-                      <span className="text-opacity-50">/</span>
-                      react
-                    </a>
-                    <a
-                      href="/"
-                      className="text-sm text-gray-600 p-1 hover:text-black"
-                    >
-                      <span className="text-opacity-50">/</span>
-                      javascript
-                    </a>
-                    <a
-                      href="/"
-                      className="text-sm text-gray-600 p-1 hover:text-black"
-                    >
-                      <span className="text-opacity-50">/</span>
-                      tailwind
-                    </a>
-                  </div>
+                  <TagList tagList={article.tag_list} />
                   <div className="mb-1 leading-6">{article.description}</div>
                   <div className="flex justify-between items-center">
                     <div className="flex">
