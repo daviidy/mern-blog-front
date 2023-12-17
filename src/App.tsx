@@ -10,7 +10,7 @@ const App: React.FC = () => {
   const isTokenAvailable = !!localStorage.getItem('token');
   return (
     <BrowserRouter>
-      <Navbar />
+      {isTokenAvailable ? <Navbar /> : null}
       <Routes>
         <Route
           path="/login"

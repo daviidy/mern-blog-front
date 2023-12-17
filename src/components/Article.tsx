@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "./Spinner";
+import CommentsList from "./CommentsList";
+import CommentForm from "./CommentForm";
 
 interface ArticleObj {
   title: string;
@@ -86,6 +88,12 @@ const Article: React.FC = () => {
                 <h2 className="text-lg lg:text-2xl font-bold text-gray-900">
                   Discussion ({article.comments_count})
                 </h2>
+              </div>
+              <div className="antialiased mx-auto max-w-screen-sm">
+                <div className="space-y-4">
+                  <CommentForm id={id} />
+                  <CommentsList id={id} />
+                </div>
               </div>
             </section>
           </article>

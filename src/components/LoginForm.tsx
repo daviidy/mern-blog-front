@@ -1,6 +1,7 @@
 // src/components/LoginForm.tsx
 import React, { useState } from "react";
 import authService from "../services/AuthService";
+import Spinner from "./Spinner";
 
 interface FormData {
   email: string;
@@ -13,8 +14,15 @@ const LoginForm: React.FC = () => {
     password: "",
   });
 
-  const handleLogin = () => {
-    authService.login(formData.email, formData.password);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const login = await authService.login(formData.email, formData.password);
+    if (login !== null && login.success === true) {
+      window.location.href = "/articles";
+    }
   };
 
   const handleChange = (
@@ -47,7 +55,7 @@ const LoginForm: React.FC = () => {
             Log in to your account
           </h1>
 
-          <form className="mt-6" action="#" method="POST">
+          <form onSubmit={handleLogin} className="mt-6">
             <div>
               <label className="block text-gray-700">Email Address</label>
               <input
@@ -88,15 +96,17 @@ const LoginForm: React.FC = () => {
                 Forgot Password?
               </a>
             </div>
-
-            <button
-              type="submit"
-              onSubmit={handleLogin}
-              className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+            {loading ? (
+              <Spinner />
+            ) : (
+              <button
+                type="submit"
+                className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
               px-4 py-3 mt-6"
-            >
-              Log In
-            </button>
+              >
+                Log In
+              </button>
+            )}
           </form>
 
           <hr className="my-6 border-gray-300 w-full" />

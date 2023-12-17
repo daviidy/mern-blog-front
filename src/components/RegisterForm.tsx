@@ -75,8 +75,6 @@ const RegisterForm: React.FC = () => {
           <form
             onSubmit={handleRegister}
             className="mt-6"
-            action="#"
-            method="POST"
           >
             <div>
               <label className="block text-gray-700">Username</label>

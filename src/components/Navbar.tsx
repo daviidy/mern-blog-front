@@ -3,9 +3,8 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: "Dashboard", href: "/", current: true },
+  { name: "Home", href: "/", current: true },
   { name: "Articles", href: "/articles", current: false },
-  { name: "Create an article", href: "/", current: false },
 ];
 
 function classNames(...classes: any) {
@@ -13,6 +12,24 @@ function classNames(...classes: any) {
 }
 
 export default function Navbar() {
+  const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  };
+
+  const getUserImage = () => {
+    if (localStorage.getItem("user") !== null) {
+      const storedUser = JSON.parse(localStorage.getItem("user")!);
+      // check if property profile_image exists in object
+      if (storedUser.hasOwnProperty("profile_image")) {
+        return storedUser.profile_image;
+      }
+
+    }
+    return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/800px-User-avatar.svg.png";
+  };
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -34,9 +51,9 @@ export default function Navbar() {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
+                    className="max-w-full h-8 w-auto sm:h-10"
+                    src="https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png"
+                    alt="DEV Community"
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
@@ -60,15 +77,6 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  type="button"
-                  className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
@@ -77,7 +85,7 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={getUserImage()}
                         alt=""
                       />
                     </Menu.Button>
@@ -122,6 +130,7 @@ export default function Navbar() {
                         {({ active }) => (
                           <a
                             href="/"
+                            onClick={handleLogout}
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"

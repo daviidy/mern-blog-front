@@ -19,19 +19,20 @@ class AuthenticationService {
     this.baseUrl = 'http://localhost:5100/api'; 
   }
 
-  async login(username: string, password: string): Promise<Response | null> {
+  async login(email: string, password: string): Promise<Response | null> {
     try {
       const response = await fetch(`${this.baseUrl}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (response.status === 200) {
         const res = await response.json();
-        localStorage.setItem('token', JSON.stringify(res.token));
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
         return {success: true, message: res.token};
       } else {
         return null;
